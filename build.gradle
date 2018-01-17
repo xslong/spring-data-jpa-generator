@@ -1,0 +1,59 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+group = 'cn.xslong.codegen'
+apply plugin: 'eclipse'
+version = '1.0.0'
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+ext {
+    springVersion = '4.3.12.RELEASE'
+}
+
+idea {
+    module {
+        downloadJavadoc = false
+        downloadSources = true
+    }
+}
+repositories {
+    maven { url 'http://maven.aliyun.com/mvn/repository/' }
+    jcenter()
+}
+
+tasks.withType(JavaCompile) {
+    options.incremental = true
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
+    }
+}
+
+dependencies {
+    compile 'org.apache.commons:commons-lang3:3.5'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
+    compile("org.springframework.boot:spring-boot-starter")
+
+    compile("org.springframework.boot:spring-boot-starter-freemarker") {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
+    }
+
+    compile 'mysql:mysql-connector-java:5.1.40'
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
